@@ -86,6 +86,9 @@ make
 
 ## 📖 Usage Guide
 
+![Control Panel Interface](pictures/control%20panel.png)
+*The Qt-based control panel interface showing grid layout, camera controls, and panel parameter sliders*
+
 ### 1. Panel Discovery
 
 1. Connect your panels to the same network as your computer
