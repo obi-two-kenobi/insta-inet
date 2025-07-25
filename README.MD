@@ -297,7 +297,7 @@ This project is provided as-is for educational and community use. The reverse-en
 
 ## 🙏 Acknowledgments
 
-- Pandora2 Community center in Dortmund, Germany for providing the opportunity to save these panels
+- [Pandora 2.0](https://pandorazweipunktnull.org) Community center in Dortmund, Germany for providing the opportunity to save these panels
 - Open source OpenCV and Qt communities
 - Reverse engineering community for tools and techniques
 
