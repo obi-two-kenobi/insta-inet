@@ -7,7 +7,7 @@ A reverse-engineered driver and Qt-based control application for Instalight 2022
 This project represents a complete reverse-engineering effort of the proprietary "Insta-inet" protocol used by Instalight 2022 LED panels. Instead of letting these panels end up in landfills, this driver enables communities to repurpose them for displays, art installations, and educational projects.
 
 ![Instalight 2022 Panel Setup](pictures/IMG_7453.jpeg)
-*Instalight 2022 LED panels in operation at Pandora2 community center*
+*Instalight 2022 LED panels in operation at Pandora 2.0 community center*
 
 ![Panel Control Interface](pictures/IMG_7450.jpeg)
 *Close-up view of the LED panel display showing the grid-based content distribution*
