@@ -7,7 +7,7 @@ A reverse-engineered driver and Qt-based control application for Instalight 2022
 This project represents a complete reverse-engineering effort of the proprietary "Insta-inet" protocol used by Instalight 2022 LED panels. Instead of letting these panels end up in landfills, this driver enables communities to repurpose them for displays, art installations, and educational projects.
 
 ![Instalight 2022 Panel Setup](pictures/IMG_7453.jpeg)
-*Instalight 2022 LED panels in operation at the community center*
+*Instalight 2022 LED panels in operation at Pandora2 community center*
 
 ![Panel Control Interface](pictures/IMG_7450.jpeg)
 *Close-up view of the LED panel display showing the grid-based content distribution*
@@ -148,11 +148,11 @@ struct DiscoveryPacket {
 #### 2. Discovery Reply Packet (Panel Response)
 
 Panels respond to discovery requests with their network information. The reply contains:
-- Panel's IP address
-- Panel status and capabilities
-- Network configuration details
+- Panel's IP address ✅
+- Panel status and capabilities ❓
+- Network configuration details ✅
 
-**IP Extraction:** The panel's IP address is extracted from the reply packet, allowing the application to build a list of available panels for subsequent data transmission.
+**IP Extraction:** The panel's IP address is extracted from the reply packet (byte 30-33), allowing the application to build a list of available panels for subsequent data transmission.
 
 #### 3. Data Packet (Frame Transmission)
 
@@ -267,7 +267,8 @@ This project demonstrates how reverse engineering can breathe new life into disc
 
 - **Environmental**: Prevents electronic waste
 - **Educational**: Provides learning opportunities in protocol analysis
-- **Community**: Enables affordable display solutions for community centers
+- **Community**: Enables free display solutions for community center activities
+- **Cultural**: Supports art installations and public displays
 - **Technical**: Preserves functionality of proprietary hardware
 
 ## ⚠️ Important Notes
