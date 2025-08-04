@@ -1,5 +1,6 @@
 #include "inetcontroler.h"
 #include "discovery.h"
+#include "server.h"
 #include "ui_inetcontroler.h"
 #include "insta-inet.h"
 #include "videoworker.h"
@@ -12,6 +13,12 @@ inetControler::inetControler(QWidget *parent)
     , ui(new Ui::inetControler)
 {
     std::thread transmitter(INSTAINET::TransmitData, &INSTAINET::Panels, 9410, false, 50); transmitter.detach();
+    //QThread* serverWorker = new QThread(this);
+    //server* Server = new server();
+
+    //Server->moveToThread(serverWorker);
+    //serverWorker->start();
+
     ui->setupUi(this);
     ui->detectionBar->setValue(0);
 }
@@ -38,6 +45,7 @@ void inetControler::on_scanbtn_clicked()
     //inet::discoverPanels(inet::IPs, ui->detectionTimeSelector->value()); //blocking. used the discovery library.
     QThread* discThread = new QThread(this);
     discovery* discoverer = new discovery(inet::IPs,ui->detectionTimeSelector->value());
+
     discoverer->moveToThread(discThread);
     QObject::connect(discThread, &QThread::started ,discoverer , &discovery::detect);
     QObject::connect(discoverer, &discovery::valueChanged, this , [this](){
@@ -69,7 +77,8 @@ void inetControler::on_scanbtn_clicked()
         inet::IPs.clear();
         ui->masterToggle->setEnabled(1);
     });
-    QObject::connect(discoverer, &discovery::tick, this , [this](int count=0){
+
+    QObject::connect(discoverer, &discovery::tick, this , [this](int count=1){
         ui->detectionBar->setValue(count);
     });
 
@@ -227,6 +236,7 @@ void inetControler::on_isCamera_clicked(bool checked)
 
 void inetControler::on_renderBtn_clicked()
 {
+
     QComboBox* boxes[4][4] = {
         {ui->comboBox00, ui->comboBox01, ui->comboBox02, ui->comboBox03},
         {ui->comboBox10, ui->comboBox11, ui->comboBox12, ui->comboBox13},

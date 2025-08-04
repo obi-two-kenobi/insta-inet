@@ -23,6 +23,8 @@ SOURCES += \
     insta-inet.cpp \
     main.cpp \
     inetcontroler.cpp \
+    server.cpp \
+    squaregraphicsview.cpp \
     videoworker.cpp
 
 HEADERS += \
@@ -30,6 +32,8 @@ HEADERS += \
     discovery.h \
     inetcontroler.h \
     insta-inet.h \
+    server.h \
+    squaregraphicsview.h \
     videoworker.h
 
 FORMS += \

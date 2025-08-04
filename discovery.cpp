@@ -109,8 +109,7 @@ void discovery::detect()
             }
         }
         close(sock);
-
-    emit valueChanged();
-    qDebug() << "Emitting valueChanged";
+        emit valueChanged();
+        this->deleteLater();  // Automatically clean up
     return;
 }

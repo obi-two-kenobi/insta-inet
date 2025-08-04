@@ -41,13 +41,15 @@ template <> constexpr inline auto discovery::qt_create_metaobjectdata<qt_meta_ta
         "discovery",
         "valueChanged",
         "",
-        "count"
+        "tick"
     };
 
     QtMocHelpers::UintData qt_methods {
         // Signal 'valueChanged'
-        QtMocHelpers::SignalData<void(int)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::Int, 3 },
+        QtMocHelpers::SignalData<void()>(1, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'tick'
+        QtMocHelpers::SignalData<void(int)>(3, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 2 },
         }}),
     };
     QtMocHelpers::UintData qt_properties {
@@ -72,12 +74,15 @@ void discovery::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
     auto *_t = static_cast<discovery *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 0: _t->valueChanged(); break;
+        case 1: _t->tick((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
-        if (QtMocHelpers::indexOfMethod<void (discovery::*)(int )>(_a, &discovery::valueChanged, 0))
+        if (QtMocHelpers::indexOfMethod<void (discovery::*)()>(_a, &discovery::valueChanged, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (discovery::*)(int )>(_a, &discovery::tick, 1))
             return;
     }
 }
@@ -101,21 +106,27 @@ int discovery::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 2)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 2;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 2)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 1;
+        _id -= 2;
     }
     return _id;
 }
 
 // SIGNAL 0
-void discovery::valueChanged(int _t1)
+void discovery::valueChanged()
 {
-    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1);
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void discovery::tick(int _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 1, nullptr, _t1);
 }
 QT_WARNING_POP
