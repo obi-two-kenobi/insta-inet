@@ -12,6 +12,7 @@ LIBS += -L/opt/homebrew/Cellar/opencv/4.11.0_1/lib
 # Explicitly link to required OpenCV libraries
 LIBS += -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_videoio -lopencv_imgproc
 
+ICON = MyIcon.icns
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
