@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 17.0.0, 2025-08-07T13:22:04. -->
+<!-- Written by QtCreator 17.0.0, 2025-08-07T15:39:20. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -83,23 +83,23 @@
     <value type="bool" key="ClangTools.PreferConfigFile">true</value>
     <valuelist type="QVariantList" key="ClangTools.SelectedDirs"/>
     <valuelist type="QVariantList" key="ClangTools.SelectedFiles">
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/discovery.cpp</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/insta-inet.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/squaregraphicsview.cpp</value>
      <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/videoworker.cpp</value>
      <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/imageWorkerClass.cpp</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/squaregraphicsview.cpp</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/videoworker.h</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/inetcontroler.h</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/insta-inet.cpp</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/main.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/insta-inet.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/discovery.cpp</value>
      <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/imageWorkerClass.h</value>
      <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/serverClass.cpp</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/squaregraphicsview.h</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/discovery.h</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/camerWorkerClass.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/insta-inet.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/inetcontroler.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/main.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/videoworker.h</value>
      <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/inetcontroler.cpp</value>
-     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/camerWorkerClass.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/camerWorkerClass.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/discovery.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/squaregraphicsview.h</value>
      <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/serverClass.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/camerWorkerClass.h</value>
     </valuelist>
     <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
     <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
@@ -128,7 +128,7 @@
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
-      <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
+      <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">true</value>
       <valuelist type="QVariantList" key="QtProjectManager.QMakeBuildStep.SelectedAbis"/>
      </valuemap>
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.1">

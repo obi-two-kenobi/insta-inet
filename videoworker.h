@@ -63,6 +63,11 @@ public slots:
     void resume();
     void stop();
     void togglePause();
+    void setFrame(int frameNumber);
+
+signals:
+    void frameCount(int);
+    void currentFrame(int);
 
 
 private:
@@ -71,7 +76,8 @@ private:
     QComboBox* comboBoxes[4][4];
     SquareGraphicsView* graphicsViews[4][4];
     std::vector<cv::Mat>& croppedRef;
-
+    cv::VideoCapture* vid;
+    int userFrameCount=-1;
     bool isPaused= false;
     bool isStopped = false;
 };

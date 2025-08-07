@@ -70,6 +70,8 @@ protected:
     QThread* discoveryWorkerThread;
     discovery* discoveryWorker;
     cv::VideoCapture* cam;
+    videoWorker* vidWorker;
+    QThread* videoWorkerThread;
     QComboBox* idbx[4][4]; //id boxes
     SquareGraphicsView* gvs[4][4]; //graphics views
 

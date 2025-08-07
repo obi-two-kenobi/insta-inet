@@ -17,10 +17,11 @@ videoWorker::videoWorker(QString path, int rows, int cols, QComboBox* boxes[4][4
 
 void videoWorker::run()
 {
-    cv::VideoCapture vid(pathToVideo.toStdString());
+    vid = new cv::VideoCapture(pathToVideo.toStdString());
     cv::Mat img;
-    double fps = vid.get(cv::CAP_PROP_FPS);
+    double fps = vid->get(cv::CAP_PROP_FPS);
     int delay = static_cast<int>(1000.0 / fps);
+    emit frameCount(static_cast<int>(vid->get(cv::CAP_PROP_FRAME_COUNT)));
 
 
     while (!isStopped) {
@@ -28,8 +29,10 @@ void videoWorker::run()
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
-        vid >> img;
+        if (userFrameCount!=-1) {vid->set(cv::CAP_PROP_POS_FRAMES, userFrameCount-1); userFrameCount=-1;}
+        if (!vid->read(img)) break;
         if (img.empty()) break;
+        emit currentFrame(static_cast<int>(vid->get(cv::CAP_PROP_POS_FRAMES)));
         cv::resize(img, img, cv::Size(activeCols * 18, activeRows * 18));
 
         if (INSTAINET::cropImgToGrid(activeRows, activeCols, img, croppedRef)) {
@@ -75,4 +78,11 @@ void videoWorker::stop()
 
 void videoWorker::togglePause() {
     isPaused = !isPaused;
+}
+
+void videoWorker::setFrame(int frameNumber)
+{
+    userFrameCount = frameNumber;
+    qDebug() << "\n\n\n" << "new frame: " << frameNumber << "recieved\n\n\n";
+
 }

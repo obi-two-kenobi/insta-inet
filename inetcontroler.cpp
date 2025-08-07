@@ -315,6 +315,7 @@ void inetControler::on_renderBtn_clicked()
         ui->pauseBtn->setEnabled(1);
         ui->stopBtn->setEnabled(1);
         ui->renderBtn->setEnabled(0);
+        ui->videoSeekBar->setEnabled(0);
 
         cam = new cv::VideoCapture(0);
 
@@ -347,6 +348,7 @@ void inetControler::on_renderBtn_clicked()
         ui->stopBtn->click();
         ui->pauseBtn->setEnabled(0);
         ui->stopBtn->setEnabled(0);
+        ui->videoSeekBar->setEnabled(0);
 
 
         imageWorker* worker = new class imageWorker(ui->pathSelector->text(),activeRows, activeCols, idbx, gvs , INSTAINET::Cropped);
@@ -363,26 +365,40 @@ void inetControler::on_renderBtn_clicked()
         ui->pauseBtn->setEnabled(1);
         ui->renderBtn->setEnabled(0);
         ui->isCamera->setEnabled(0);
+        ui->videoSeekBar->setEnabled(1);
 
-        videoWorker* worker = new videoWorker(ui->pathSelector->text(), activeRows, activeCols, idbx, gvs, INSTAINET::Cropped);
-        QThread* videoWorkerThread = new QThread(this);
+        vidWorker = new videoWorker(ui->pathSelector->text(), activeRows, activeCols, idbx, gvs, INSTAINET::Cropped);
+        videoWorkerThread = new QThread(this);
         videoWorkerThread->setObjectName(QString("videoWorkerThread"));
-        worker->moveToThread(videoWorkerThread);
+        vidWorker->moveToThread(videoWorkerThread);
 
-        QObject::connect(videoWorkerThread, &QThread::started, worker, &videoWorker::run);
+        QObject::connect(videoWorkerThread, &QThread::started, vidWorker, &videoWorker::run);
 
         QObject::connect(ui->stopBtn, &QPushButton::clicked, this, [=]() mutable {
             ui->renderBtn->setEnabled(1);
             ui->stopBtn->setEnabled(0);
             ui->pauseBtn->setEnabled(0);
-            worker->stop();
+            vidWorker->stop();
+            ui->videoSeekBar->setMaximum(2);
+            ui->videoSeekBar->setValue(2);
+            ui->label_2->setText(QString("File is:"));
         });
 
-        bool isPaused = false;
-        connect(ui->pauseBtn, &QPushButton::clicked, this, [=, &isPaused]() mutable {
-            worker->togglePause();
-            isPaused = !isPaused;
+        QObject::connect(vidWorker, &videoWorker::frameCount, this, [=](int max) mutable {
+            ui->videoSeekBar->setMinimum(0);
+            ui->videoSeekBar->setMaximum(max);
         });
+
+        QObject::connect(vidWorker, &videoWorker::currentFrame, this, [=](int frameNum) mutable {
+            ui->videoSeekBar->setValue(frameNum);
+            ui->label_2->setText(QString::number(frameNum));
+        });
+
+        connect(ui->pauseBtn, &QPushButton::clicked, this, [=]() mutable {
+            vidWorker->togglePause();
+        });
+
+        connect(ui->videoSeekBar, &QSlider::sliderMoved, vidWorker, &videoWorker::setFrame,Qt::DirectConnection);
 
         videoWorkerThread->start();
     }
@@ -393,5 +409,4 @@ void inetControler::closeEvent(QCloseEvent *event)
     emit windowIsClosing();
     event->accept();
 }
-
 
