@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,21 +18,23 @@ LIBS += -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_videoio -lope
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    cameraworker.cpp \
+    camerWorkerClass.cpp \
     discovery.cpp \
+    imageWorker.cpp \
     insta-inet.cpp \
     main.cpp \
     inetcontroler.cpp \
-    server.cpp \
+    serverClass.cpp \
     squaregraphicsview.cpp \
     videoworker.cpp
 
 HEADERS += \
-    cameraworker.h \
+    camerWorkerClass.h \
     discovery.h \
+    imageWorker.h \
     inetcontroler.h \
     insta-inet.h \
-    server.h \
+    serverClass.h \
     squaregraphicsview.h \
     videoworker.h
 

@@ -4,7 +4,16 @@
 #include <QMainWindow>
 #include <QFileDialog>
 
-
+#include "discovery.h"
+#include "serverClass.h"
+#include "ui_inetcontroler.h"
+#include "insta-inet.h"
+#include "videoworker.h"
+#include "camerWorkerClass.h"
+#include "imageWorker.h"
+#include <QtCore/qthread.h>
+#include <QCloseEvent>
+#include <map>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -49,7 +58,20 @@ private slots:
 
     void on_renderBtn_clicked();
 
-private:
+    void closeEvent( QCloseEvent* event );
+
+signals:
+    void windowIsClosing();
+
+protected:
     Ui::inetControler *ui;
+    QThread* serverWorkerThread;
+    serverClass* serverWorker;
+    QThread* discoveryWorkerThread;
+    discovery* discoveryWorker;
+    cv::VideoCapture* cam;
+    QComboBox* idbx[4][4]; //id boxes
+    SquareGraphicsView* gvs[4][4]; //graphics views
+
 };
 #endif // INETCONTROLER_H

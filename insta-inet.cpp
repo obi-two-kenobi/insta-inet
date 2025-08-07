@@ -31,7 +31,7 @@ bool INSTAINET::instaLight2022::render(cv::Mat& frame){
 
     std::vector<uint8_t> leftflatFrame(leftFrame.data, leftFrame.data + leftFrame.total() * leftFrame.elemSize());
     // Fill the RGB_Left and RGB_Right arrays with the frame data
-    for (int j = 0; j < 162; j++) {
+    for (size_t j = 0; j < 162; j++) {
         if (j < leftflatFrame.size() ) {
             data.RGB_Left[j * 3] = leftflatFrame[j * 3];
             data.RGB_Left[j * 3 + 1] = leftflatFrame[j * 3 + 1];
@@ -39,7 +39,7 @@ bool INSTAINET::instaLight2022::render(cv::Mat& frame){
         }
     }
     std::vector<uint8_t> rightflatFrame(rightFrame.data, rightFrame.data + rightFrame.total() * rightFrame.elemSize());
-    for (int j = 0; j < 162; j++) {
+    for (size_t j = 0; j < 162; j++) {
         if (j < rightflatFrame.size()) {
             data.RGB_Right[j * 3] = rightflatFrame[j * 3];
             data.RGB_Right[j * 3 + 1] = rightflatFrame[j * 3 + 1];

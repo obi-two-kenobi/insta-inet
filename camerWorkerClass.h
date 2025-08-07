@@ -1,5 +1,6 @@
 #pragma once
 
+#include "squaregraphicsview.h"
 #include <QObject>
 #include <QComboBox>
 #include <opencv2/opencv.hpp>
@@ -53,7 +54,7 @@ class cameraWorker : public QObject
 {
     Q_OBJECT
 public:
-    cameraWorker(cv::VideoCapture* cam, int rows, int cols, QComboBox* boxes[4][4], std::vector<cv::Mat>& cropped);
+    cameraWorker(cv::VideoCapture* cam, int rows, int cols, QComboBox* boxes[4][4],SquareGraphicsView* gvs[4][4], std::vector<cv::Mat>& cropped);
 
 public slots:
     void run();
@@ -64,6 +65,7 @@ public slots:
 
 private:
     QComboBox* comboBoxes[4][4];
+    SquareGraphicsView* graphicsViews[4][4];
     std::vector<cv::Mat>& croppedRef;
     int activeRows, activeCols;
     bool isPaused= false;

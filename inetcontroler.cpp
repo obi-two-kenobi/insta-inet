@@ -1,30 +1,74 @@
 #include "inetcontroler.h"
-#include "discovery.h"
-#include "server.h"
-#include "ui_inetcontroler.h"
-#include "insta-inet.h"
-#include "videoworker.h"
-#include "cameraworker.h"
-#include <QtCore/qthread.h>
+
 namespace inet = INSTAINET;
 
 inetControler::inetControler(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::inetControler)
 {
-    std::thread transmitter(INSTAINET::TransmitData, &INSTAINET::Panels, 9410, false, 50); transmitter.detach();
-    //QThread* serverWorker = new QThread(this);
-    //server* Server = new server();
-
-    //Server->moveToThread(serverWorker);
-    //serverWorker->start();
 
     ui->setupUi(this);
     ui->detectionBar->setValue(0);
+
+
+    serverWorkerThread = new QThread(this);
+    serverWorkerThread->setObjectName(QString("serverWorkerThread"));
+    serverWorker = new serverClass(); //Server is used as a private instace in class inetControler
+    serverWorker->moveToThread(serverWorkerThread);
+
+    QObject::connect(serverWorkerThread, &QThread::started, serverWorker, &serverClass::run);
+    QObject::connect(this, &inetControler::windowIsClosing, serverWorker, &serverClass::stop);
+    serverWorkerThread->start();
+
+    idbx[0][0]=ui->comboBox00;
+    idbx[0][1]=ui->comboBox01;
+    idbx[0][2]=ui->comboBox02;
+    idbx[0][3]=ui->comboBox03;
+
+    idbx[1][0]=ui->comboBox10;
+    idbx[1][1]=ui->comboBox11;
+    idbx[1][2]=ui->comboBox12;
+    idbx[1][3]=ui->comboBox13;
+
+    idbx[2][0]=ui->comboBox20;
+    idbx[2][1]=ui->comboBox21;
+    idbx[2][2]=ui->comboBox22;
+    idbx[2][3]=ui->comboBox23;
+
+    idbx[3][0]=ui->comboBox30;
+    idbx[3][1]=ui->comboBox31;
+    idbx[3][2]=ui->comboBox32;
+    idbx[3][3]=ui->comboBox33;
+
+    gvs[0][0]=ui->gv00;
+    gvs[0][1]=ui->gv01;
+    gvs[0][2]=ui->gv02;
+    gvs[0][3]=ui->gv03;
+
+    gvs[1][0]=ui->gv10;
+    gvs[1][1]=ui->gv11;
+    gvs[1][2]=ui->gv12;
+    gvs[1][3]=ui->gv13;
+
+    gvs[2][0]=ui->gv20;
+    gvs[2][1]=ui->gv21;
+    gvs[2][2]=ui->gv22;
+    gvs[2][3]=ui->gv23;
+
+    gvs[3][0]=ui->gv30;
+    gvs[3][1]=ui->gv31;
+    gvs[3][2]=ui->gv32;
+    gvs[3][3]=ui->gv33;
+
 }
 
 inetControler::~inetControler()
 {
+    //serverWorker->stop();
+    delete serverWorkerThread;
+    delete serverWorker;
+    delete discoveryWorkerThread;
+    delete discoveryWorker;
     delete ui;
 }
 
@@ -43,12 +87,12 @@ void inetControler::on_scanbtn_clicked()
     inet::Panels.clear();
 
     //inet::discoverPanels(inet::IPs, ui->detectionTimeSelector->value()); //blocking. used the discovery library.
-    QThread* discThread = new QThread(this);
-    discovery* discoverer = new discovery(inet::IPs,ui->detectionTimeSelector->value());
+    discoveryWorkerThread = new QThread(this);
+    discoveryWorker = new discovery(inet::IPs,ui->detectionTimeSelector->value());
 
-    discoverer->moveToThread(discThread);
-    QObject::connect(discThread, &QThread::started ,discoverer , &discovery::detect);
-    QObject::connect(discoverer, &discovery::valueChanged, this , [this](){
+    discoveryWorker->moveToThread(discoveryWorkerThread);
+    QObject::connect(discoveryWorkerThread, &QThread::started ,discoveryWorker , &discovery::detect);
+    QObject::connect(discoveryWorker, &discovery::valueChanged, this , [this](){
         this->ui->scanbtn->setText(QString("Rescan"));
 
         QList<QComboBox*> boxes = {
@@ -78,11 +122,11 @@ void inetControler::on_scanbtn_clicked()
         ui->masterToggle->setEnabled(1);
     });
 
-    QObject::connect(discoverer, &discovery::tick, this , [this](int count=1){
+    QObject::connect(discoveryWorker, &discovery::tick, this , [this](int count=1){
         ui->detectionBar->setValue(count);
     });
 
-    discThread->start();
+    discoveryWorkerThread->start();
     this->ui->scanbtn->setText(QString("Scanning..."));
 }
 
@@ -235,14 +279,7 @@ void inetControler::on_isCamera_clicked(bool checked)
 
 
 void inetControler::on_renderBtn_clicked()
-{
-
-    QComboBox* boxes[4][4] = {
-        {ui->comboBox00, ui->comboBox01, ui->comboBox02, ui->comboBox03},
-        {ui->comboBox10, ui->comboBox11, ui->comboBox12, ui->comboBox13},
-        {ui->comboBox20, ui->comboBox21, ui->comboBox22, ui->comboBox23},
-        {ui->comboBox30, ui->comboBox31, ui->comboBox32, ui->comboBox33}
-    };
+{  
     int activeRows = 0;
     int activeCols = 0;
 
@@ -250,7 +287,7 @@ void inetControler::on_renderBtn_clicked()
     for (int row = 0; row < 4; ++row) {
         bool hasActive = false;
         for (int col = 0; col < 4; ++col) {
-            int value = boxes[row][col]->currentText().toInt();
+            int value = idbx[row][col]->currentText().toInt();
             if (value != -1) {
                 hasActive = true;
                 break;
@@ -263,7 +300,7 @@ void inetControler::on_renderBtn_clicked()
     for (int col = 0; col < 4; ++col) {
         bool hasActive = false;
         for (int row = 0; row < 4; ++row) {
-            int value = boxes[row][col]->currentText().toInt();
+            int value = idbx[row][col]->currentText().toInt();
             if (value != -1) {
                 hasActive = true;
                 break;
@@ -279,13 +316,14 @@ void inetControler::on_renderBtn_clicked()
         ui->stopBtn->setEnabled(1);
         ui->renderBtn->setEnabled(0);
 
-        cv::VideoCapture* cam = new cv::VideoCapture(0);
+        cam = new cv::VideoCapture(0);
 
-        cameraWorker* worker = new cameraWorker(cam,activeRows, activeCols,boxes,INSTAINET::Cropped);
-        QThread* workerThread = new QThread(this);
-        worker->moveToThread(workerThread);
+        cameraWorker* worker = new cameraWorker(cam,activeRows, activeCols,idbx,gvs,INSTAINET::Cropped);
+        QThread* cameraWorkerThread = new QThread(this);
+        cameraWorkerThread->setObjectName(QString("camerWorkerThread"));
+        worker->moveToThread(cameraWorkerThread);
 
-        QObject::connect(workerThread, &QThread::started, worker, &cameraWorker::run);
+        QObject::connect(cameraWorkerThread, &QThread::started, worker, &cameraWorker::run);
 
         QObject::connect(ui->stopBtn, &QPushButton::clicked, this, [=]() mutable {
             ui->renderBtn->setEnabled(1);
@@ -303,25 +341,20 @@ void inetControler::on_renderBtn_clicked()
             isPaused = !isPaused;
         });
 
-        workerThread->start();
+        cameraWorkerThread->start();
 
     }else if (ui->isImage->isChecked()){
         ui->stopBtn->click();
         ui->pauseBtn->setEnabled(0);
         ui->stopBtn->setEnabled(0);
-        cv::Mat img = cv::imread(ui->pathSelector->text().toStdString().c_str());
-        cv::resize(img,img,cv::Size(activeCols*18,activeRows*18));
-        if(INSTAINET::cropImgToGrid(activeRows, activeCols, img, inet::Cropped)){
-            for(int row = 0; row < 4; ++row){
-                for(int col = 0; col < 4; ++col){
-                    auto index = boxes[row][col]->currentText().toInt();
-                    if (index!=-1){
-                        inet::Panels.at(index).render(inet::Cropped.back());
-                        inet::Cropped.pop_back();
-                    }
-                }
-            }
-        }
+
+
+        imageWorker* worker = new class imageWorker(ui->pathSelector->text(),activeRows, activeCols, idbx, gvs , INSTAINET::Cropped);
+        QThread* imageWorkerThread = new QThread(this);
+        imageWorkerThread->setObjectName(QString("imageWorkerThread"));
+        worker->moveToThread(imageWorkerThread);
+        connect(imageWorkerThread, &QThread::started, worker, &imageWorker::run);
+        imageWorkerThread->start();
 
 
     }else if (ui->isVideo->isChecked()){
@@ -331,12 +364,12 @@ void inetControler::on_renderBtn_clicked()
         ui->renderBtn->setEnabled(0);
         ui->isCamera->setEnabled(0);
 
-        videoWorker* worker = new videoWorker(ui->pathSelector->text(), activeRows, activeCols, boxes, INSTAINET::Cropped);
-        QThread* workerThread = new QThread(this);
+        videoWorker* worker = new videoWorker(ui->pathSelector->text(), activeRows, activeCols, idbx, gvs, INSTAINET::Cropped);
+        QThread* videoWorkerThread = new QThread(this);
+        videoWorkerThread->setObjectName(QString("videoWorkerThread"));
+        worker->moveToThread(videoWorkerThread);
 
-        worker->moveToThread(workerThread);
-
-        QObject::connect(workerThread, &QThread::started, worker, &videoWorker::run);
+        QObject::connect(videoWorkerThread, &QThread::started, worker, &videoWorker::run);
 
         QObject::connect(ui->stopBtn, &QPushButton::clicked, this, [=]() mutable {
             ui->renderBtn->setEnabled(1);
@@ -351,12 +384,14 @@ void inetControler::on_renderBtn_clicked()
             isPaused = !isPaused;
         });
 
-
-
-        workerThread->start();
+        videoWorkerThread->start();
     }
-
 }
 
+void inetControler::closeEvent(QCloseEvent *event)
+{
+    emit windowIsClosing();
+    event->accept();
+}
 
 

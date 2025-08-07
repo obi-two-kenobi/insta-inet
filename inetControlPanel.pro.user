@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 17.0.0, 2025-08-03T17:09:52. -->
+<!-- Written by QtCreator 17.0.0, 2025-08-06T16:37:23. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -82,9 +82,30 @@
     <value type="int" key="ClangTools.ParallelJobs">5</value>
     <value type="bool" key="ClangTools.PreferConfigFile">true</value>
     <valuelist type="QVariantList" key="ClangTools.SelectedDirs"/>
-    <valuelist type="QVariantList" key="ClangTools.SelectedFiles"/>
+    <valuelist type="QVariantList" key="ClangTools.SelectedFiles">
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/discovery.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/camerWorkerClass.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/squaregraphicsview.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/inetcontroler.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/camerWorkerClass.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/serverClass.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/insta-inet.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/discovery.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/squaregraphicsview.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/videoworker.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/imageWorkerClass.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/inetcontroler.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/insta-inet.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/main.cpp</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/videoworker.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/imageWorkerClass.h</value>
+     <value type="QString">/Users/alis/Documents/Codes/QT/inetControlPanel/serverClass.cpp</value>
+    </valuelist>
     <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
     <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
+   </valuemap>
+   <valuemap type="QVariantMap" key="CppEditor.QuickFix">
+    <value type="bool" key="UseGlobalSettings">true</value>
    </valuemap>
   </valuemap>
  </data>
@@ -159,13 +180,16 @@
      <value type="bool" key="Analyzer.Valgrind.Settings.UseGlobalSettings">true</value>
      <valuelist type="QVariantList" key="CustomOutputParsers"/>
      <value type="int" key="PE.EnvironmentAspect.Base">2</value>
-     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
+     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes">
+      <value type="QString">OPENCV_AVFOUNDATION_SKIP_AUTH=0</value>
+     </valuelist>
      <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
      <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph dwarf,4096 -F 250</value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
      <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:</value>
      <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/alis/Documents/Codes/QT/inetControlPanel/inetControlPanel.pro</value>
-     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
+     <value type="bool" key="RunConfiguration.RunAsRoot">true</value>
      <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
      <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
      <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
@@ -195,13 +219,16 @@
     <value type="bool" key="Analyzer.Valgrind.Settings.UseGlobalSettings">true</value>
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
-    <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
+    <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes">
+     <value type="QString">OPENCV_AVFOUNDATION_SKIP_AUTH=0</value>
+    </valuelist>
     <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
     <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph dwarf,4096 -F 250</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/Users/alis/Documents/Codes/QT/inetControlPanel/inetControlPanel.pro</value>
-    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
+    <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">true</value>
+    <value type="bool" key="RunConfiguration.RunAsRoot">true</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>

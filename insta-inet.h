@@ -89,10 +89,10 @@ public:
                    uint8_t Right_Red_max, uint8_t Right_Green_max, uint8_t Right_Blue_max);
 };
 
-void sendUDP(const char* ip, int port, const uint8_t* data, size_t length);
-void discoverPanels(uint8_t seconds);
-void discoverPanels(std::vector<char*>& IPs,uint8_t seconds);
-void TransmitData(std::vector<instaLight2022>* panels, int port = 9410, bool debug = false, float fps = 30.0f);
+void sendUDP(const char* ip, int port, const uint8_t* data, size_t length); //reimplemented
+void discoverPanels(uint8_t seconds); //reimplemented
+void discoverPanels(std::vector<char*>& IPs,uint8_t seconds); //reimplemented
+void TransmitData(std::vector<instaLight2022>* panels, int port = 9410, bool debug = false, float fps = 30.0f); //reimplemented
 bool cropImgToGrid(uint8_t rows, uint8_t cols, cv::Mat& toBeCroppedFrame, std::vector<cv::Mat>& croppedFrames);
 
 extern std::vector <instaLight2022> Panels;

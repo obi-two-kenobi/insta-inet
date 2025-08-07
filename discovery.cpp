@@ -15,8 +15,6 @@ discovery::discovery(std::vector<char *> &IPs, int time)
 
 void discovery::detect()
 {
-    qDebug() << "Started1";
-
     // get IP address of the host(this code) and srt it to discoveryPacket.hostIP
     // Get the actual local IP address (IPv4, non-loopback)
     int sock1 = socket(AF_INET, SOCK_DGRAM, 0);
