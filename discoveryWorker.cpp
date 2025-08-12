@@ -3,17 +3,17 @@
  *and signals and slots to not block UI animations.
  */
 
-#include "discovery.h"
+#include "discoveryWorker.h"
 #include "insta-inet.h"
 #include <QtCore/qdebug.h>
 
-discovery::discovery(std::vector<char *> &IPs, int time)
+discoveryWorker::discoveryWorker(std::vector<char *> &IPs, int time)
     : IPs(IPs), time(time)
 {
 
 }
 
-void discovery::detect()
+void discoveryWorker::detect()
 {
     // get IP address of the host(this code) and srt it to discoveryPacket.hostIP
     // Get the actual local IP address (IPv4, non-loopback)

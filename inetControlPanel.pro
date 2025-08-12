@@ -4,10 +4,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17 moc
 # Include path for OpenCV
-INCLUDEPATH += /opt/homebrew/Cellar/opencv/4.11.0_1/include/opencv4
+INCLUDEPATH += /opt/homebrew/opt/opencv/include/opencv4
 
 # Link path for OpenCV
-LIBS += -L/opt/homebrew/Cellar/opencv/4.11.0_1/lib
+LIBS += -L/opt/homebrew/opt/opencv/lib
 
 # Explicitly link to required OpenCV libraries
 LIBS += -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_videoio -lopencv_imgproc
@@ -19,25 +19,23 @@ ICON = MyIcon.icns
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    camerWorkerClass.cpp \
-    discovery.cpp \
+    camerWorker.cpp \
+    discoveryWorker.cpp \
     imageWorker.cpp \
     insta-inet.cpp \
     main.cpp \
     inetcontroler.cpp \
-    serverClass.cpp \
-    squaregraphicsview.cpp \
-    videoworker.cpp
+    serverWorker.cpp \
+    videoWorker.cpp
 
 HEADERS += \
-    camerWorkerClass.h \
-    discovery.h \
+    camerWorker.h \
+    discoveryWorker.h \
     imageWorker.h \
     inetcontroler.h \
     insta-inet.h \
-    serverClass.h \
-    squaregraphicsview.h \
-    videoworker.h
+    serverWorker.h \
+    videoWorker.h
 
 FORMS += \
     inetcontroler.ui

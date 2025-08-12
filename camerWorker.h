@@ -1,6 +1,6 @@
 #pragma once
 
-#include "squaregraphicsview.h"
+#include <QGraphicsView>
 #include <QObject>
 #include <QComboBox>
 #include <opencv2/opencv.hpp>
@@ -8,16 +8,16 @@
 
 /**
  * @class cameraWorker
- * @brief Handles video stream processing for Instalight 2022 panels.
+ * @brief Handles camera capture and processing for Instalight 2022 panels.
  *
- * This class manages the acquisition of frames from a video file,
+ * This class manages the acquisition of frames from a cv::VideoCapture device,
  * processes the frames (such as cropping), and interacts with a 4x4 grid of QComboBox widgets
  * that represent the position of the panels in real life.
  * It supports pausing, resuming, and stopping the camera processing thread.
  *
  * @note This class is designed to be used with Qt's signal/slot mechanism.
  *
- * @param path to video file.
+ * @param cam Pointer to an initialized cv::VideoCapture object for frame acquisition.
  * @param rows Number of active rows in the combo box grid.
  * @param cols Number of active columns in the combo box grid.
  * @param boxes 4x4 array of pointers to QComboBox widgets for UI interaction.
@@ -50,12 +50,11 @@
  * @var cv::VideoCapture* cam
  *      Pointer to the camera capture device.
  */
-
-class videoWorker : public QObject {
+class cameraWorker : public QObject
+{
     Q_OBJECT
-
 public:
-    videoWorker(QString path, int rows, int cols, QComboBox* boxes[4][4],SquareGraphicsView* gvs[4][4], std::vector<cv::Mat>& cropped);
+    cameraWorker(cv::VideoCapture* cam, int rows, int cols, QComboBox* boxes[4][4],QGraphicsView* gvs[4][4], std::vector<cv::Mat>& cropped);
 
 public slots:
     void run();
@@ -63,21 +62,15 @@ public slots:
     void resume();
     void stop();
     void togglePause();
-    void setFrame(int frameNumber);
-
-signals:
-    void frameCount(int);
-    void currentFrame(int);
-
 
 private:
-    QString pathToVideo;
-    int activeRows, activeCols;
     QComboBox* comboBoxes[4][4];
-    SquareGraphicsView* graphicsViews[4][4];
+    QGraphicsView* graphicsViews[4][4];
     std::vector<cv::Mat>& croppedRef;
-    cv::VideoCapture* vid;
-    int userFrameCount=-1;
+    int activeRows, activeCols;
     bool isPaused= false;
     bool isStopped = false;
+    cv::VideoCapture* cam;
 };
+
+

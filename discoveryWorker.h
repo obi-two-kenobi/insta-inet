@@ -1,5 +1,5 @@
-#ifndef DISCOVERY_H
-#define DISCOVERY_H
+#ifndef DISCOVERYWORKER_H
+#define DISCOVERYWORKER_H
 
 #include <QObject>
 #include "insta-inet.h"
@@ -30,11 +30,11 @@
  *   Instantiate the class with a reference to an IP vector and a time value,
  *   then call detect() to start the discovery process.
  */
-class discovery : public QObject {
+class discoveryWorker : public QObject {
     Q_OBJECT  // Required for signal-slot system
 
 public:
-    discovery(std::vector<char*>& IPs, int time);
+    discoveryWorker(std::vector<char*>& IPs, int time);
     void detect();
 
 signals:
@@ -56,5 +56,5 @@ private:
 };
 
 
-#endif // DISCOVERY_H
+#endif // DISCOVERYWORKER_H
 

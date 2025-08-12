@@ -10,16 +10,6 @@ inetControler::inetControler(QWidget *parent)
     ui->setupUi(this);
     ui->detectionBar->setValue(0);
 
-
-    serverWorkerThread = new QThread(this);
-    serverWorkerThread->setObjectName(QString("serverWorkerThread"));
-    serverWorker = new serverClass(); //Server is used as a private instace in class inetControler
-    serverWorker->moveToThread(serverWorkerThread);
-
-    QObject::connect(serverWorkerThread, &QThread::started, serverWorker, &serverClass::run);
-    QObject::connect(this, &inetControler::windowIsClosing, serverWorker, &serverClass::stop);
-    serverWorkerThread->start();
-
     idbx[0][0]=ui->comboBox00;
     idbx[0][1]=ui->comboBox01;
     idbx[0][2]=ui->comboBox02;
@@ -62,18 +52,10 @@ inetControler::inetControler(QWidget *parent)
 
 }
 
-inetControler::~inetControler()
-{
-    //serverWorker->stop();
-    delete serverWorkerThread;
-    delete serverWorker;
-    delete discoveryWorkerThread;
-    delete discoveryWorker;
-    delete ui;
-}
 
 void inetControler::on_scanbtn_clicked()
 {
+    //default values based on Madrix
     this->ui->brightnessSlider->setSliderPosition(0xc1);
     this->ui->contrastSlider->setSliderPosition(0x7d);
     this->ui->luminSlider->setSliderPosition(0x00);
@@ -81,18 +63,19 @@ void inetControler::on_scanbtn_clicked()
     this->ui->maxBlueSlider->setSliderPosition(0xff);
     this->ui->maxGreenSlider->setSliderPosition(0xff);
     this->ui->maxRedSlider->setSliderPosition(0xff);
+
     ui->detectionBar->setMaximum(ui->detectionTimeSelector->value());
 
     inet::IPs.clear();
     inet::Panels.clear();
 
     //inet::discoverPanels(inet::IPs, ui->detectionTimeSelector->value()); //blocking. used the discovery library.
-    discoveryWorkerThread = new QThread(this);
-    discoveryWorker = new discovery(inet::IPs,ui->detectionTimeSelector->value());
+    discoveryWrkrThrd = new QThread(this);
+    discoveryWrkr = new discoveryWorker(inet::IPs,ui->detectionTimeSelector->value());
+    discoveryWrkr->moveToThread(discoveryWrkrThrd);
+    QObject::connect(discoveryWrkrThrd, &QThread::started ,discoveryWrkr , &discoveryWorker::detect);
 
-    discoveryWorker->moveToThread(discoveryWorkerThread);
-    QObject::connect(discoveryWorkerThread, &QThread::started ,discoveryWorker , &discovery::detect);
-    QObject::connect(discoveryWorker, &discovery::valueChanged, this , [this](){
+    QObject::connect(discoveryWrkr, &discoveryWorker::valueChanged, this , [this](){
         this->ui->scanbtn->setText(QString("Rescan"));
 
         QList<QComboBox*> boxes = {
@@ -122,11 +105,11 @@ void inetControler::on_scanbtn_clicked()
         ui->masterToggle->setEnabled(1);
     });
 
-    QObject::connect(discoveryWorker, &discovery::tick, this , [this](int count=1){
+    QObject::connect(discoveryWrkr, &discoveryWorker::tick, this , [this](int count=1){
         ui->detectionBar->setValue(count);
     });
 
-    discoveryWorkerThread->start();
+    discoveryWrkrThrd->start();
     this->ui->scanbtn->setText(QString("Scanning..."));
 }
 
@@ -327,13 +310,12 @@ void inetControler::on_renderBtn_clicked()
         QObject::connect(cameraWorkerThread, &QThread::started, worker, &cameraWorker::run);
 
         QObject::connect(ui->stopBtn, &QPushButton::clicked, this, [=]() mutable {
+            worker->stop();
             ui->renderBtn->setEnabled(1);
             ui->stopBtn->setEnabled(0);
             ui->pauseBtn->setEnabled(0);
             ui->isCamera->setEnabled(1);
             ui->isCamera->setChecked(0);
-            worker->stop();
-            cam->release();
         });
 
         bool isPaused = false;
@@ -367,46 +349,63 @@ void inetControler::on_renderBtn_clicked()
         ui->isCamera->setEnabled(0);
         ui->videoSeekBar->setEnabled(1);
 
-        vidWorker = new videoWorker(ui->pathSelector->text(), activeRows, activeCols, idbx, gvs, INSTAINET::Cropped);
-        videoWorkerThread = new QThread(this);
-        videoWorkerThread->setObjectName(QString("videoWorkerThread"));
-        vidWorker->moveToThread(videoWorkerThread);
+        vidioWrkr = new videoWorker(ui->pathSelector->text(), activeRows, activeCols, idbx, gvs, INSTAINET::Cropped);
+        vidioWrkrThrd = new QThread(this);
+        vidioWrkrThrd->setObjectName(QString("vidioWrkrThrd"));
+        vidioWrkr->moveToThread(vidioWrkrThrd);
 
-        QObject::connect(videoWorkerThread, &QThread::started, vidWorker, &videoWorker::run);
+        QObject::connect(vidioWrkrThrd, &QThread::started, vidioWrkr, &videoWorker::run);
 
-        QObject::connect(ui->stopBtn, &QPushButton::clicked, this, [=]() mutable {
+        QObject::connect(ui->stopBtn, &QPushButton::clicked, this, [&]() mutable {
+            if (ui->isCamera->isChecked()) return;
+            vidioWrkr->stop();
             ui->renderBtn->setEnabled(1);
-            ui->stopBtn->setEnabled(0);
-            ui->pauseBtn->setEnabled(0);
-            vidWorker->stop();
             ui->videoSeekBar->setMaximum(2);
             ui->videoSeekBar->setValue(2);
-            ui->label_2->setText(QString("File is:"));
+            ui->seekStart->setText(QString("0"));
+            ui->SeekEnd->setText(QString("-1"));
+            ui->pauseBtn->setEnabled(0);
+            ui->stopBtn->setEnabled(0);
         });
 
-        QObject::connect(vidWorker, &videoWorker::frameCount, this, [=](int max) mutable {
+        QObject::connect(vidioWrkr, &videoWorker::frameCount, this, [=](int max) mutable {
             ui->videoSeekBar->setMinimum(0);
             ui->videoSeekBar->setMaximum(max);
+            ui->SeekEnd->setText(QString::number(max));
         });
 
-        QObject::connect(vidWorker, &videoWorker::currentFrame, this, [=](int frameNum) mutable {
+        QObject::connect(vidioWrkr, &videoWorker::currentFrame, this, [=](int frameNum) mutable {
             ui->videoSeekBar->setValue(frameNum);
-            ui->label_2->setText(QString::number(frameNum));
+            ui->seekStart->setText(QString::number(frameNum));
         });
 
         connect(ui->pauseBtn, &QPushButton::clicked, this, [=]() mutable {
-            vidWorker->togglePause();
+            if (ui->isCamera->isChecked()) return;
+            vidioWrkr->togglePause();
         });
 
-        connect(ui->videoSeekBar, &QSlider::sliderMoved, vidWorker, &videoWorker::setFrame,Qt::DirectConnection);
+        connect(ui->videoSeekBar, &QSlider::sliderMoved, vidioWrkr, &videoWorker::setFrame,Qt::DirectConnection);
 
-        videoWorkerThread->start();
+        vidioWrkrThrd->start();
     }
 }
 
-void inetControler::closeEvent(QCloseEvent *event)
+
+void inetControler::on_stopServerBtn_clicked()
 {
-    emit windowIsClosing();
-    event->accept();
+    if(!ServerIsOn){
+        ServerIsOn=true;
+        serverWrkrThrd = new QThread(this);
+        serverWrkrThrd->setObjectName(QString("serverWrkrThrd"));
+        serverwrkr = new serverWorker(); //Server is used as a private instace in class inetControler
+        serverwrkr->moveToThread(serverWrkrThrd);
+        QObject::connect(serverWrkrThrd, &QThread::started, serverwrkr, &serverWorker::run);
+        serverWrkrThrd->start();
+        ui->stopServerBtn->setText(QString("Stop Server 💤"));
+    }else{
+        ServerIsOn=false;
+        serverwrkr->stop();
+        ui->stopServerBtn->setText(QString("Start Server 🚀"));
+    }
 }
 

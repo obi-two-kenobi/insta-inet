@@ -1,21 +1,21 @@
-#ifndef SERVERCLASS_H
-#define SERVERCLASS_H
+#ifndef SERVERWORKER_H
+#define SERVERWORKER_H
 
 #include <QObject>
 #include "insta-inet.h"
 #include <QDebug>
 
 
-class serverClass : public QObject
+class serverWorker : public QObject
 {
     Q_OBJECT
 public:
-    explicit serverClass(std::vector<INSTAINET::instaLight2022>* panels = &INSTAINET::Panels , int port= 9410, float fps=50.0);
+    explicit serverWorker(std::vector<INSTAINET::instaLight2022>* panels = &INSTAINET::Panels , int port= 9410, float fps=50.0);
     void sendUDP(const char* ip, int port, const uint8_t* data, size_t length);
-
+    void stop();
 public slots:
     void run();
-    void stop();
+
 
 signals:
 
@@ -41,4 +41,4 @@ private:
 
 };
 
-#endif // SERVERCLASS_H
+#endif // SERVERWORKER_H

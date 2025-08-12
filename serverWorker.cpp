@@ -1,13 +1,13 @@
-#include "serverClass.h"
+#include "serverWorker.h"
 #include <QtCore/qdebug.h>
 
-serverClass::serverClass(std::vector<INSTAINET::instaLight2022> *panels, int port, float fps)
+serverWorker::serverWorker(std::vector<INSTAINET::instaLight2022> *panels, int port, float fps)
     :panels(panels), port(port), fps(fps)
 {
 
 }
 
-void serverClass::sendUDP(const char *ip, int port, const uint8_t *data, size_t length)
+void serverWorker::sendUDP(const char *ip, int port, const uint8_t *data, size_t length)
 {
     sock = socket(AF_INET, SOCK_DGRAM, 0);
     if (sock < 0) { perror("socket"); return; }
@@ -27,7 +27,7 @@ void serverClass::sendUDP(const char *ip, int port, const uint8_t *data, size_t 
     close(sock);
 }
 
-void serverClass::run()
+void serverWorker::run()
 {
     while (this->active)
     {
@@ -45,9 +45,7 @@ void serverClass::run()
     this->deleteLater();
 }
 
-void serverClass::stop()
+void serverWorker::stop()
 {
-
     this->active = false;
-    qDebug() << "Signal Recieved";
 }

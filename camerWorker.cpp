@@ -1,27 +1,29 @@
-#include "videoWorker.h"
+#include "camerWorker.h"
 #include "insta-inet.h"
 #include <thread>
 
-videoWorker::videoWorker(QString path, int rows, int cols, QComboBox* boxes[4][4],SquareGraphicsView* gvs[4][4], std::vector<cv::Mat>& cropped)
-    : pathToVideo(path), activeRows(rows), activeCols(cols), croppedRef(cropped)
+cameraWorker::cameraWorker(cv::VideoCapture* cam, int rows, int cols, QComboBox *boxes[4][4], QGraphicsView* gvs[4][4], std::vector<cv::Mat> &cropped)
+    :croppedRef(cropped), activeRows(rows), activeCols(cols), cam(cam)
 {
     // Copy QComboBox* array
     for (int i = 0; i < 4; ++i)
         for (int j = 0; j < 4; ++j)
             comboBoxes[i][j] = boxes[i][j];
+
     //Copy SquareGraphicsView
     for (int i = 0; i < 4; ++i)
         for (int j = 0; j < 4; ++j)
             this->graphicsViews[i][j] = gvs[i][j];
 }
 
-void videoWorker::run()
+void cameraWorker::run()
 {
-    vid = new cv::VideoCapture(pathToVideo.toStdString());
     cv::Mat img;
-    double fps = vid->get(cv::CAP_PROP_FPS);
+    cam->set(cv::CAP_PROP_FRAME_WIDTH, activeRows * 18 *3);
+    cam->set(cv::CAP_PROP_FRAME_HEIGHT, activeCols * 18 *3);
+
+    double fps = cam->get(cv::CAP_PROP_FPS);
     int delay = static_cast<int>(1000.0 / fps);
-    emit frameCount(static_cast<int>(vid->get(cv::CAP_PROP_FRAME_COUNT)));
 
 
     while (!isStopped) {
@@ -29,10 +31,8 @@ void videoWorker::run()
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
-        if (userFrameCount!=-1) {vid->set(cv::CAP_PROP_POS_FRAMES, userFrameCount-1); userFrameCount=-1;}
-        if (!vid->read(img)) break;
+        cam->read( img);
         if (img.empty()) break;
-        emit currentFrame(static_cast<int>(vid->get(cv::CAP_PROP_POS_FRAMES)));
         cv::resize(img, img, cv::Size(activeCols * 18, activeRows * 18));
 
         if (INSTAINET::cropImgToGrid(activeRows, activeCols, img, croppedRef)) {
@@ -57,32 +57,25 @@ void videoWorker::run()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }
-
+    cam->release();
     this->deleteLater();  // Automatically clean up
 }
 
-void videoWorker::pause()
+void cameraWorker::pause()
 {
     isPaused = true;
 }
 
-void videoWorker::resume()
+void cameraWorker::resume()
 {
     isPaused = false;
 }
 
-void videoWorker::stop()
+void cameraWorker::stop()
 {
     isStopped = true;
 }
 
-void videoWorker::togglePause() {
+void cameraWorker::togglePause() {
     isPaused = !isPaused;
-}
-
-void videoWorker::setFrame(int frameNumber)
-{
-    userFrameCount = frameNumber;
-    qDebug() << "\n\n\n" << "new frame: " << frameNumber << "recieved\n\n\n";
-
 }

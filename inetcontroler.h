@@ -4,12 +4,12 @@
 #include <QMainWindow>
 #include <QFileDialog>
 
-#include "discovery.h"
-#include "serverClass.h"
+#include "discoveryWorker.h"
+#include "serverWorker.h"
 #include "ui_inetcontroler.h"
 #include "insta-inet.h"
-#include "videoworker.h"
-#include "camerWorkerClass.h"
+#include "videoWorker.h"
+#include "camerWorker.h"
 #include "imageWorker.h"
 #include <QtCore/qthread.h>
 #include <QCloseEvent>
@@ -27,7 +27,6 @@ class inetControler : public QMainWindow
 
 public:
     inetControler(QWidget *parent = nullptr);
-    ~inetControler();
 
 private slots:
     void on_scanbtn_clicked();
@@ -58,22 +57,23 @@ private slots:
 
     void on_renderBtn_clicked();
 
-    void closeEvent( QCloseEvent* event );
+    void on_stopServerBtn_clicked();
 
 signals:
     void windowIsClosing();
 
 protected:
     Ui::inetControler *ui;
-    QThread* serverWorkerThread;
-    serverClass* serverWorker;
-    QThread* discoveryWorkerThread;
-    discovery* discoveryWorker;
+    QThread* serverWrkrThrd;
+    serverWorker* serverwrkr;
+    QThread* discoveryWrkrThrd;
+    discoveryWorker* discoveryWrkr;
     cv::VideoCapture* cam;
-    videoWorker* vidWorker;
-    QThread* videoWorkerThread;
+    videoWorker* vidioWrkr;
+    QThread* vidioWrkrThrd;
     QComboBox* idbx[4][4]; //id boxes
-    SquareGraphicsView* gvs[4][4]; //graphics views
+    QGraphicsView* gvs[4][4]; //graphics views
+    bool ServerIsOn=false;
 
 };
 #endif // INETCONTROLER_H

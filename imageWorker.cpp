@@ -1,7 +1,7 @@
 #include "imageWorker.h"
 
 
-imageWorker::imageWorker(QString path, int rows, int cols, QComboBox *boxes[4][4], SquareGraphicsView* gvs[4][4], std::vector<cv::Mat> &cropped)
+imageWorker::imageWorker(QString path, int rows, int cols, QComboBox *boxes[4][4], QGraphicsView* gvs[4][4], std::vector<cv::Mat> &cropped)
     : pathToImage(path), activeRows(rows), activeCols(cols), croppedRef(cropped)
 {
     // Copy QComboBox* array
