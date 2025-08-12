@@ -46,11 +46,12 @@ This project represents a complete reverse-engineering effort of the proprietary
 - **File Playback**: Support for various video formats via OpenCV
 - **Frame-by-frame Processing**: Synchronized video-to-panel rendering
 - **Grid Integration**: Automatic frame distribution across panel grid
+- **Frame-based Controls**: Seek video based on frames
 
 #### GUI Controller (`inetcontroler.h`)
 - **Real-time Controls**: Live adjustment of panel parameters
 - **Visual Feedback**: Interactive grid representation
-- **File Management**: Easy video file selection and loading
+- **File Management**: Easy file selection and loading
 
 ## 🚀 Getting Started
 
